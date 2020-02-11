@@ -1,0 +1,16 @@
+@import '../../assets/style/header.scss';
+@import '../../assets/style/footer.scss';
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    color: orange;
+    margin: 30px 0;
+    .bg{
+        width: 200px;
+        height: 100px;
+        background: url('../../assets/img/3.jpg') center /cover;
+    }
+}

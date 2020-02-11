@@ -1,0 +1,23 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    background-color: rgb(96, 125, 151);
+
+    .info {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-around;
+
+        .info-item {
+            width: 30%;
+            height: 100%;
+            font-size: 18px;
+            text-align: center;
+            line-height: 60px;
+            color: #ccc;
+        }
+    }
+}
