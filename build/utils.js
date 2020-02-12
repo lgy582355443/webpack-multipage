@@ -1,5 +1,9 @@
 const htmlWebpackPlugin = require("html-webpack-plugin")
 const glob = require('glob')
+const {
+    devChunks,
+    prodChunks
+} = require('./config')
 
 // //递归遍历页面目录
 // function readFileList(dir, fileList) {
@@ -43,10 +47,11 @@ function configHtmlWebpackPlugin(entryPath, pagesPath) {
     return glob.sync(pagesPath).reduce((htmlWebpackPluginArr, page) => {
         const file = page.slice(page.lastIndexOf('/') + 1)
         const filename = file.slice(0, file.lastIndexOf('.'))
-        let chunks = [];
+        // let chunks = process.env.NODE_ENV === "development" ? devChunks : prodChunks
+        let chunks = process.env.NODE_ENV === "development" ? [] : ['default', 'vendors', 'styles', 'runtime']
         //判断该页面是否引入js文件
         if (entry[filename]) {
-            chunks = [filename]
+            chunks.push(filename)
         }
         htmlWebpackPluginArr.push(new htmlWebpackPlugin({
             filename: `pages/${filename}.html`, //生成html文件名
