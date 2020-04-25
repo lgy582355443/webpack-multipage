@@ -5,12 +5,9 @@ const webpackConfig = require('./webpack.config')
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const {
-    CleanWebpackPlugin
-} = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-// const glob = require('glob')
-// const PurifyCssWebpackPlugin = require('purgecss-webpack-plugin')
+const glob = require('glob-all')
+const PurifyCssWebpackPlugin = require('purgecss-webpack-plugin')
 
 module.exports = merge(webpackConfig, {
     //编译模式,'development'不会压缩代码，'production'压缩代码
@@ -29,7 +26,7 @@ module.exports = merge(webpackConfig, {
                 }
             }),
         ],
-        //分割代码
+        // 分割代码
         splitChunks: {
             chunks: "async", //分割异步打包的代码
             minSize: 30 * 1024, //模块大于30k会被抽离到公共模块
@@ -40,13 +37,15 @@ module.exports = merge(webpackConfig, {
             cacheGroups: { //设置缓存组用来抽取满足不同规则的chunk,
                 default: {
                     minChunks: 2, //模块出现2次就会被抽离到公共模块
-                    priority: -20, //优先级，一个chunk很可能满足多个缓存组，会被抽取到优先级高的缓存组中
+                    priority: 10, //优先级，一个chunk很可能满足多个缓存组，会被抽取到优先级高的缓存组中
                     reuseExistingChunk: true, //	如果该chunk中引用了已经被抽取的chunk，直接引用该chunk，不会重复打包代码
                 },
                 //单独打包生产环境依赖
                 vendors: {
                     test: /[\\/]node_modules[\\/]/,
-                    priority: -10
+                    chunks: 'initial',
+                    priority: 20,
+                    name: 'vendors',
                 },
                 // 将项目所有css打包到一个文件中
                 styles: {
@@ -57,9 +56,9 @@ module.exports = merge(webpackConfig, {
                 }
             }
         },
-        runtimeChunk: {
-            name: "runtime"
-        }
+        // runtimeChunk: {
+        //     name: "runtime"
+        // }
     },
     plugins: [
         //定义环境变量
@@ -82,12 +81,12 @@ module.exports = merge(webpackConfig, {
                 ]
             }
         }),
-        //消除多余的css(有坑，消除.scss文件的时候出错)
-        // new PurifyCssWebpackPlugin({
-        //     paths: glob.sync(`${path.resolve(__dirname,'src')}/**`, {
-        //         nodir: true
-        //     }),
-        // }),
+        //消除多余的css
+        new PurifyCssWebpackPlugin({
+            paths: glob.sync(path.resolve(__dirname, '../src/**/*'), {
+                nodir: true
+            }),
+        }),
         // //拷贝 public文件夹 到 dist 
         // new CopyWebpackPlugin([{
         //     from: path.resolve(__dirname, '../public'),
