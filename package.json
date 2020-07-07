@@ -38,7 +38,7 @@
     "html-withimg-loader": "^0.1.16",
     "install": "^0.13.0",
     "mini-css-extract-plugin": "^0.9.0",
-    "npm": "^6.13.7",
+    "npm": "^6.14.6",
     "postcss-loader": "^3.0.0",
     "purgecss-webpack-plugin": "^2.1.2",
     "sass-loader": "^8.0.2",
